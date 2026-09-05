@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KIGALI NUDGE Dashboard</title>
+<meta name="description" content="Dashboard perubahan perilaku pendinginan sekolah, berbasis Google Spreadsheet.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="./assets/styles.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="in">
+    <span class="brand"><span class="mark"></span><b>KIGALI NUDGE</b></span>
+    <span class="grow"></span>
+    <span class="chip" id="status"><span class="led"></span><span id="status-t">memuat</span></span>
+    <button class="iconbtn" id="refresh" aria-label="Perbarui data" title="Perbarui">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg>
+    </button>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="in">
+    <p class="kicker">Program Sustainable Cooling</p>
+    <h1>Perilaku dingin<br>yang terukur.</h1>
+    <p class="lead">Menggeser cara pelajar memakai AC di sekolah, lalu membuktikannya dengan data lapangan yang murah dan tervalidasi.</p>
+    <p class="stamp"><span id="sekolah">Sekolah Adiwiyata</span> &nbsp;·&nbsp; diperbarui <span id="updated">memuat</span></p>
+    <div class="herostats">
+      <div class="hstat"><div class="l">Setpoint rata rata naik</div><div class="v tnum" id="kpi-setpoint">+0</div><div class="s">selisih intervensi terhadap kontrol</div></div>
+      <div class="hstat"><div class="l">AC nyala saat ruang kosong</div><div class="v tnum" id="kpi-ackosong">0</div><div class="s">makin turun makin baik</div></div>
+      <div class="hstat"><div class="l">Kepatuhan tutup pintu jendela</div><div class="v tnum" id="kpi-pintu">0</div><div class="s">makin naik makin baik</div></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <div class="head"><div class="k">Bukti</div><h2>Sebelum dan sesudah</h2></div>
+    <div class="grid k2">
+      <div class="card">
+        <p class="lbl">Setpoint rata rata (°C), makin tinggi makin hemat</p>
+        <div class="bar"><span class="n">Intervensi awal</span><span class="track"><span class="fill int" id="b-intB"></span></span><span class="x tnum" id="v-intB">0</span></div>
+        <div class="bar"><span class="n">Intervensi akhir</span><span class="track"><span class="fill int" id="b-intP"></span></span><span class="x tnum" id="v-intP">0</span></div>
+        <div class="bar"><span class="n">Kontrol awal</span><span class="track"><span class="fill ktr" id="b-ktB"></span></span><span class="x tnum" id="v-ktB">0</span></div>
+        <div class="bar"><span class="n">Kontrol akhir</span><span class="track"><span class="fill ktr" id="b-ktP"></span></span><span class="x tnum" id="v-ktP">0</span></div>
+        <div class="legend"><span><span class="dot" style="background:var(--accent)"></span>Intervensi</span><span><span class="dot" style="background:var(--ctrl)"></span>Kontrol</span></div>
+      </div>
+      <div class="card">
+        <p class="lbl">Papan skor antar kelas</p>
+        <table><thead><tr><th class="rank">#</th><th>Kelas</th><th>Skor</th></tr></thead><tbody id="papan"><tr><td colspan="3">memuat</td></tr></tbody></table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><div class="k">Dampak</div><h2>Estimasi penghematan</h2></div>
+    <div class="grid k3">
+      <div class="card tile"><div class="l">Energi dihindari per tahun</div><div class="v tnum" id="en-kwh">0</div></div>
+      <div class="card tile"><div class="l">Biaya dihemat per tahun</div><div class="v tnum" id="en-rp">0</div></div>
+      <div class="card tile"><div class="l">CO2 dihindari per tahun</div><div class="v tnum" id="en-co2">0</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><div class="k">Tren</div><h2>Perubahan tiap minggu</h2></div>
+    <div class="grid k2">
+      <div class="card">
+        <p class="lbl">Setpoint per minggu, intervensi dan kontrol</p>
+        <div id="tren-chart" class="chart"></div>
+        <div class="legend"><span><span class="dot" style="background:var(--accent)"></span>Intervensi</span><span><span class="dot" style="background:var(--ctrl)"></span>Kontrol</span></div>
+      </div>
+      <div class="card">
+        <p class="lbl">Ringkasan mingguan</p>
+        <div style="overflow-x:auto">
+          <table><thead><tr><th>Minggu</th><th>Setpoint</th><th>AC kosong</th><th>Pintu</th></tr></thead><tbody id="tren-tbody"><tr><td colspan="4">memuat</td></tr></tbody></table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><div class="k">Kualitas</div><h2>Mutu data</h2></div>
+    <div class="card">
+      <div class="qstrip">
+        <div class="q"><div class="l">Kesesuaian uji petik</div><div class="v tnum" id="mt-sesuai">0</div></div>
+        <div class="q"><div class="l">Baris perlu diperiksa</div><div class="v tnum" id="mt-periksa">0</div></div>
+        <div class="q"><div class="l">Baris log terisi</div><div class="v tnum" id="mt-terisi">0</div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot"><span class="mark"></span> KIGALI NUDGE &nbsp;·&nbsp; sumber data Google Spreadsheet</div>
+</main>
+
+<script src="./config.js"></script>
+<script src="./assets/app.js"></script>
+</body>
+</html>
