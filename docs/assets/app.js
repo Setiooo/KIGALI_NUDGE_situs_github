@@ -13,7 +13,8 @@
       { minggu: 'Minggu 1', sp_int: 22.25, sp_ktr: 22.0, ack_int: 1.0, ack_ktr: 1.0, pin_int: 0.0, pin_ktr: 0.0 },
       { minggu: 'Minggu 2', sp_int: 24.33, sp_ktr: 22.5, ack_int: 0.0, ack_ktr: 1.0, pin_int: 1.0, pin_ktr: 0.0 },
       { minggu: 'Minggu 3', sp_int: 24.5, sp_ktr: 22.5, ack_int: 0.0, ack_ktr: 1.0, pin_int: 1.0, pin_ktr: 0.0 }
-    ]
+    ],
+    literasi: { pre: 58, post: 82, delta: 24 }
   };
   var num = function (v) { return typeof v === 'number' && isFinite(v); };
   function $(id) { return document.getElementById(id); }
@@ -64,6 +65,10 @@
     $('mt-sesuai').textContent = num(m.kesesuaian) ? Math.round(m.kesesuaian * 100) + '%' : '0';
     $('mt-periksa').textContent = nf(m.periksa, 0);
     $('mt-terisi').textContent = nf(m.terisi, 0);
+
+    var lit = d.literasi || {};
+    $('lit-delta').textContent = num(lit.delta) ? (lit.delta >= 0 ? '+' : '') + Math.round(lit.delta) + ' poin' : '0 poin';
+    $('lit-prepost').textContent = (num(lit.pre) ? nf(lit.pre, 0) : '0') + ' → ' + (num(lit.post) ? nf(lit.post, 0) : '0');
 
     renderTren(d.tren || []);
   }
